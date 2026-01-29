@@ -1,0 +1,10 @@
+{
+  "schema": "db.v1",
+  "description": "Encrypted database metadata registry.",
+  "encryption": {
+    "status": "placeholder",
+    "algorithm": "",
+    "key_reference": ""
+  },
+  "records": []
+}

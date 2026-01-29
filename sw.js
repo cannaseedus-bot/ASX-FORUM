@@ -2,7 +2,10 @@ const CACHE_NAME = 'asx-forum-static-v1';
 const ASSETS = [
   './',
   './index.html',
+  './manifest.json',
   './manifest.webmanifest',
+  './brain.json',
+  './db.json',
   './asx-forum-logo.svg'
 ];
 

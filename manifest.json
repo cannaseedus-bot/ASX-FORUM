@@ -1,0 +1,21 @@
+{
+  "manifest_version": 1,
+  "name": "ASX Community Forum",
+  "role": "static_api_server_and_orchestrator",
+  "protocol": {
+    "transport": "websocket",
+    "fallback_transport": "hyper-file-system",
+    "endpoints": {
+      "ws": "wss://example.invalid/asx-forum",
+      "hyper": "hyper://asx-forum"
+    }
+  },
+  "schemas": {
+    "brain": "brain.json",
+    "db": "db.json"
+  },
+  "includes": [
+    "brain.json",
+    "db.json"
+  ]
+}
