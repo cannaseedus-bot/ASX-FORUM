@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASX Community Forum</title>
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="preload" href="manifest.json" as="fetch" type="application/json" crossorigin="anonymous">
+    <style>
+        /* Classic Forum Styling - Familiar & Functional */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+        
+        /* Container */
+        .forum-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        
+        /* Header */
+        .forum-header {
+            background: #2c3e50;
+            color: white;
+            padding: 15px 20px;
+            border-bottom: 3px solid #3498db;
+        }
+        
+        .forum-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .forum-subtitle {
+            color: #bdc3c7;
+            font-size: 14px;
+        }
+        
+        .user-info {
+            float: right;
+            text-align: right;
+        }
+        
+        .user-name {
+            font-weight: bold;
+            color: #3498db;
+        }
+        
+        /* Navigation */
+        .forum-nav {
+            background: #34495e;
+            padding: 10px 20px;
+        }
+        
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
+        
+        .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+        }
+        
+        .nav-links a:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .nav-links .active {
+            background: #3498db;
+        }
+        
+        /* Main Content */
+        .forum-main {
+            padding: 20px;
+        }
+        
+        /* Table Styling - Classic Forum Look */
+        .forum-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            background: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .forum-table th {
+            background: #ecf0f1;
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 2px solid #bdc3c7;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .forum-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        
+        .forum-table tr:hover {
+            background: #f8f9fa;
+        }
+        
+        /* Thread/Post Styling */
+        .thread-title {
+            font-weight: bold;
+            color: #2c3e50;
+            text-decoration: none;
+            font-size: 15px;
+        }
+        
+        .thread-title:hover {
+            color: #3498db;
+        }
+        
+        .thread-stats {
+            font-size: 12px;
+            color: #7f8c8d;
+        }
+        
+        .thread-author {
+            color: #2c3e50;
+            font-weight: 500;
+        }
+        
+        .thread-date {
+            color: #7f8c8d;
+            font-size: 12px;
+        }
+        
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: bold;
+            margin-right: 5px;
+        }
+        
+        .badge-new {
+            background: #e74c3c;
+            color: white;
+        }
+        
+        .badge-popular {
+            background: #f39c12;
+            color: white;
+        }
+        
+        .badge-pinned {
+            background: #2ecc71;
+            color: white;
+        }
+        
+        .badge-solved {
+            background: #27ae60;
+            color: white;
+        }
+        
+        /* Post Content */
+        .post-container {
+            background: white;
+            border: 1px solid #ddd;
+            margin-bottom: 20px;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        .post-header {
+            background: #f8f9fa;
+            padding: 10px 15px;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .post-author {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .post-meta {
+            font-size: 12px;
+            color: #7f8c8d;
+        }
+        
+        .post-body {
+            padding: 20px;
+            line-height: 1.8;
+        }
+        
+        .post-signature {
+            padding: 10px 20px;
+            background: #f8f9fa;
+            border-top: 1px solid #eee;
+            font-style: italic;
+            color: #7f8c8d;
+            font-size: 13px;
+        }
+        
+        /* Reply Form */
+        .reply-form {
+            background: white;
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 3px;
+            margin-top: 20px;
+        }
+        
+        .form-title {
+            margin-bottom: 15px;
+            color: #2c3e50;
+            font-size: 16px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #2c3e50;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            font-family: inherit;
+            font-size: 14px;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+        
+        textarea.form-control {
+            min-height: 150px;
+            resize: vertical;
+        }
+        
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .btn-primary {
+            background: #3498db;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #2980b9;
+        }
+        
+        .btn-secondary {
+            background: #95a5a6;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #7f8c8d;
+        }
+        
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            margin-top: 30px;
+        }
+        
+        .page-link {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            background: white;
+            color: #3498db;
+            text-decoration: none;
+            border-radius: 3px;
+        }
+        
+        .page-link:hover {
+            background: #f8f9fa;
+        }
+        
+        .page-link.active {
+            background: #3498db;
+            color: white;
+            border-color: #3498db;
+        }
+        
+        /* Sidebar */
+        .forum-sidebar {
+            background: #f8f9fa;
+            border-left: 1px solid #ddd;
+            padding: 20px;
+        }
+        
+        .sidebar-widget {
+            margin-bottom: 25px;
+        }
+        
+        .widget-title {
+            font-size: 16px;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+        }
+        
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #3498db;
+        }
+        
+        .stat-label {
+            color: #7f8c8d;
+            font-size: 13px;
+        }
+        
+        /* Footer */
+        .forum-footer {
+            background: #2c3e50;
+            color: #bdc3c7;
+            padding: 20px;
+            text-align: center;
+            margin-top: 40px;
+            font-size: 13px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .forum-table {
+                font-size: 13px;
+            }
+            
+            .forum-table th,
+            .forum-table td {
+                padding: 8px 10px;
+            }
+            
+            .nav-links {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+        }
+        
+        /* Hidden SCX Data (AI Underneath) */
+        .scx-data {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="forum-container">
+        <!-- Header -->
+        <header class="forum-header">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <div class="forum-title">ASX Community Forum</div>
+                    <div class="forum-subtitle">Discuss SCX, Atomic OS, and Symbolic Computing</div>
+                </div>
+                <div class="user-info">
+                    <div>Welcome, <span class="user-name" id="username">Traveler</span></div>
+                    <div style="font-size: 12px;">Last active: Just now</div>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Navigation -->
+        <nav class="forum-nav">
+            <ul class="nav-links">
+                <li><a href="#home" class="active">Home</a></li>
+                <li><a href="#topics">Topics</a></li>
+                <li><a href="#unread">Unread</a></li>
+                <li><a href="#new">New Topics</a></li>
+                <li><a href="#popular">Popular</a></li>
+                <li><a href="#help">Help</a></li>
+                <li style="margin-left: auto;"><a href="#newpost" class="btn-primary" style="color: white;">New Topic</a></li>
+            </ul>
+        </nav>
+        
+        <!-- Main Content -->
+        <div style="display: flex;">
+            <main class="forum-main" style="flex: 3;">
+                <!-- Forum Statistics -->
+                <div style="background: #f8f9fa; padding: 15px; margin-bottom: 20px; border-radius: 3px; font-size: 13px;">
+                    <div style="display: flex; gap: 30px;">
+                        <div><strong>Threads:</strong> 1,427</div>
+                        <div><strong>Posts:</strong> 24,891</div>
+                        <div><strong>Members:</strong> 843</div>
+                        <div><strong>Online:</strong> 47</div>
+                    </div>
+                </div>
+                
+                <!-- Forum Categories -->
+                <table class="forum-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 50%;">Forum</th>
+                            <th>Topics</th>
+                            <th>Posts</th>
+                            <th>Last Post</th>
+                        </tr>
+                    </thead>
+                    <tbody id="forumList">
+                        <!-- Will be populated by JavaScript -->
+                    </tbody>
+                </table>
+                
+                <!-- Recent Topics -->
+                <h2 style="margin: 30px 0 15px 0; color: #2c3e50;">Recent Topics</h2>
+                <table class="forum-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 40%;">Topic</th>
+                            <th>Replies</th>
+                            <th>Views</th>
+                            <th>Author</th>
+                            <th>Last Post</th>
+                        </tr>
+                    </thead>
+                    <tbody id="topicList">
+                        <!-- Will be populated by JavaScript -->
+                    </tbody>
+                </table>
+                
+                <!-- Pagination -->
+                <div class="pagination">
+                    <a href="#" class="page-link active">1</a>
+                    <a href="#" class="page-link">2</a>
+                    <a href="#" class="page-link">3</a>
+                    <a href="#" class="page-link">4</a>
+                    <a href="#" class="page-link">5</a>
+                    <a href="#" class="page-link">Next →</a>
+                </div>
+            </main>
+            
+            <!-- Sidebar -->
+            <aside class="forum-sidebar" style="flex: 1;">
+                <div class="sidebar-widget">
+                    <div class="widget-title">Forum Stats</div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div>
+                            <div class="stat-number">1,427</div>
+                            <div class="stat-label">Topics</div>
+                        </div>
+                        <div>
+                            <div class="stat-number">24,891</div>
+                            <div class="stat-label">Posts</div>
+                        </div>
+                        <div>
+                            <div class="stat-number">843</div>
+                            <div class="stat-label">Members</div>
+                        </div>
+                        <div>
+                            <div class="stat-number">47</div>
+                            <div class="stat-label">Online</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="sidebar-widget">
+                    <div class="widget-title">Online Users</div>
+                    <div style="font-size: 13px;">
+                        <div style="margin-bottom: 5px;">• System Architect (Now)</div>
+                        <div style="margin-bottom: 5px;">• AI Researcher (2 min ago)</div>
+                        <div style="margin-bottom: 5px;">• Quantum Traveler (5 min ago)</div>
+                        <div style="margin-bottom: 5px;">• Symbolic Engineer (10 min ago)</div>
+                    </div>
+                </div>
+                
+                <div class="sidebar-widget">
+                    <div class="widget-title">Most Active Today</div>
+                    <div style="font-size: 13px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                            <span>System Architect</span>
+                            <span>42 posts</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                            <span>AI Researcher</span>
+                            <span>28 posts</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                            <span>Quantum Traveler</span>
+                            <span>19 posts</span>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+        
+        <!-- Footer -->
+        <footer class="forum-footer">
+            <div>ASX Community Forum v2.1 • Powered by Atomic OS</div>
+            <div style="margin-top: 10px; font-size: 12px;">
+                All times are UTC • The team • Contact us • Privacy • Terms
+            </div>
+        </footer>
+    </div>
+
+    <!-- SCX Data Storage (Hidden from users) -->
+    <div class="scx-data" id="scxStorage"></div>
+
+    <script>
+        // ============================================
+        // JSON DATA STRUCTURE (Human + AI Friendly)
+        // ============================================
+        
+        const forumData = {
+            metadata: {
+                name: "ASX Community Forum",
+                version: "2.1",
+                created: "2025-11-07T10:00:00Z",
+                scx_symbols: ["FM°", "RT°", "MA°", "AH°", "AC°"]
+            },
+            
+            categories: [
+                {
+                    id: "cat_1",
+                    name: "SCX Symbolic Computing",
+                    description: "Discuss SCX symbols, syntax, and semantic computing",
+                    topics: 247,
+                    posts: 5241,
+                    last_post: {
+                        title: "SCX Compression Ratios - Real World Examples",
+                        author: "System Architect",
+                        time: "2 hours ago"
+                    },
+                    scx: ["SCX°", "XJ°", "RT°"]
+                },
+                {
+                    id: "cat_2",
+                    name: "Atomic OS Development",
+                    description: "Building applications with Atomic OS and ASX Runtime",
+                    topics: 189,
+                    posts: 3892,
+                    last_post: {
+                        title: "Materializing Apps from Symbol Recipes",
+                        author: "Quantum Traveler",
+                        time: "5 hours ago"
+                    },
+                    scx: ["OS°", "TP°", "AB°"]
+                },
+                {
+                    id: "cat_3",
+                    name: "Multi-Agent Systems",
+                    description: "Coordinating agents with SCX protocols",
+                    topics: 156,
+                    posts: 3210,
+                    last_post: {
+                        title: "Agent Conflict Resolution Patterns",
+                        author: "AI Researcher",
+                        time: "1 day ago"
+                    },
+                    scx: ["MA°", "Ψ", "φ"]
+                },
+                {
+                    id: "cat_4",
+                    name: "Neural-Symbolic AI",
+                    description: "Bridging neural networks and symbolic reasoning",
+                    topics: 98,
+                    posts: 2104,
+                    last_post: {
+                        title: "Training SCX Interpreters with Reinforcement Learning",
+                        author: "Symbolic Engineer",
+                        time: "2 days ago"
+                    },
+                    scx: ["ω", "γ", "KB°"]
+                }
+            ],
+            
+            topics: [
+                {
+                    id: "topic_1",
+                    category: "cat_1",
+                    title: "SCX Symbolic Computing Deep Dive",
+                    author: "System Architect",
+                    created: "2025-11-06T14:30:00Z",
+                    replies: 42,
+                    views: 1289,
+                    last_post: {
+                        author: "AI Researcher",
+                        time: "45 minutes ago"
+                    },
+                    badges: ["pinned", "popular"],
+                    scx: ["SCX°", "XJ°", "RT°"]
+                },
+                {
+                    id: "topic_2",
+                    category: "cat_1",
+                    title: "Understanding @ # $ % Symbols in Practice",
+                    author: "Quantum Traveler",
+                    created: "2025-11-06T10:15:00Z",
+                    replies: 28,
+                    views: 842,
+                    last_post: {
+                        author: "System Architect",
+                        time: "2 hours ago"
+                    },
+                    badges: ["new"],
+                    scx: ["@", "#", "$", "%"]
+                },
+                {
+                    id: "topic_3",
+                    category: "cat_2",
+                    title: "Building a Forum with Atomic Blocks",
+                    author: "Symbolic Engineer",
+                    created: "2025-11-05T16:20:00Z",
+                    replies: 31,
+                    views: 921,
+                    last_post: {
+                        author: "Quantum Traveler",
+                        time: "3 hours ago"
+                    },
+                    badges: ["solved"],
+                    scx: ["AB°", "AH°", "FM°"]
+                },
+                {
+                    id: "topic_4",
+                    category: "cat_3",
+                    title: "Multi-Agent Communication Protocols",
+                    author: "AI Researcher",
+                    created: "2025-11-05T11:45:00Z",
+                    replies: 19,
+                    views: 634,
+                    last_post: {
+                        author: "System Architect",
+                        time: "5 hours ago"
+                    },
+                    badges: [],
+                    scx: ["MA°", "Ψ", "(>)"]
+                },
+                {
+                    id: "topic_5",
+                    category: "cat_4",
+                    title: "From Neural Weights to Symbolic Meaning",
+                    author: "System Architect",
+                    created: "2025-11-04T09:30:00Z",
+                    replies: 57,
+                    views: 1542,
+                    last_post: {
+                        author: "AI Researcher",
+                        time: "1 day ago"
+                    },
+                    badges: ["popular"],
+                    scx: ["ω", "γ", "~"]
+                }
+            ],
+            
+            users: [
+                {
+                    id: "user_1",
+                    username: "System Architect",
+                    role: "Administrator",
+                    posts: 1427,
+                    joined: "2025-01-15",
+                    scx_symbols: ["SCX°", "RT°", "OS°"]
+                },
+                {
+                    id: "user_2",
+                    username: "AI Researcher",
+                    role: "Moderator",
+                    posts: 892,
+                    joined: "2025-03-22",
+                    scx_symbols: ["MA°", "ω", "KB°"]
+                }
+            ],
+            
+            // AI/System Data (Hidden from normal view)
+            scx_context: {
+                semantic_network: {
+                    connected_concepts: ["symbolic_computing", "atomic_blocks", "multi_agent"],
+                    learning_patterns: {
+                        user_engagement: 0.88,
+                        topic_quality: 0.92,
+                        knowledge_growth: 0.76
+                    }
+                },
+                agent_coordination: {
+                    active_agents: ["φ_mx2lm", "ω_qwen", "γ_janus"],
+                    coordination_protocol: "@#(>)%"
+                }
+            }
+        };
+        
+        // ============================================
+        // RENDER FUNCTIONS (Classic Forum Display)
+        // ============================================
+        
+        function renderForums() {
+            const forumList = document.getElementById('forumList');
+            forumList.innerHTML = '';
+            
+            forumData.categories.forEach(category => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>
+                        <div style="font-weight: bold; font-size: 15px;">
+                            <a href="#" style="color: #2c3e50; text-decoration: none;">${category.name}</a>
+                        </div>
+                        <div style="font-size: 13px; color: #7f8c8d; margin-top: 5px;">
+                            ${category.description}
+                        </div>
+                    </td>
+                    <td style="text-align: center;">${category.topics}</td>
+                    <td style="text-align: center;">${category.posts}</td>
+                    <td style="font-size: 13px;">
+                        <div><strong>${category.last_post.title}</strong></div>
+                        <div style="color: #7f8c8d;">by ${category.last_post.author}</div>
+                        <div style="color: #7f8c8d; font-size: 12px;">${category.last_post.time}</div>
+                    </td>
+                `;
+                forumList.appendChild(row);
+            });
+        }
+        
+        function renderTopics() {
+            const topicList = document.getElementById('topicList');
+            topicList.innerHTML = '';
+            
+            forumData.topics.forEach(topic => {
+                const badges = topic.badges.map(badge => {
+                    if (badge === 'new') return '<span class="badge badge-new">NEW</span>';
+                    if (badge === 'popular') return '<span class="badge badge-popular">POPULAR</span>';
+                    if (badge === 'pinned') return '<span class="badge badge-pinned">PINNED</span>';
+                    if (badge === 'solved') return '<span class="badge badge-solved">SOLVED</span>';
+                    return '';
+                }).join('');
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>
+                        ${badges}
+                        <a href="#" class="thread-title">${topic.title}</a>
+                        <div class="thread-stats">
+                            In: ${forumData.categories.find(c => c.id === topic.category)?.name || 'General'}
+                        </div>
+                    </td>
+                    <td style="text-align: center;">
+                        <div style="font-weight: bold;">${topic.replies}</div>
+                    </td>
+                    <td style="text-align: center;">
+                        <div style="color: #7f8c8d;">${topic.views}</div>
+                    </td>
+                    <td>
+                        <div class="thread-author">${topic.author}</div>
+                        <div class="thread-date">${formatDate(topic.created)}</div>
+                    </td>
+                    <td>
+                        <div style="font-size: 13px;">
+                            <div><strong>${topic.last_post.author}</strong></div>
+                            <div style="color: #7f8c8d;">${topic.last_post.time}</div>
+                        </div>
+                    </td>
+                `;
+                topicList.appendChild(row);
+            });
+        }
+        
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const now = new Date();
+            const diffMs = now - date;
+            const diffHours = diffMs / (1000 * 60 * 60);
+            
+            if (diffHours < 1) {
+                return 'Just now';
+            } else if (diffHours < 24) {
+                return `${Math.floor(diffHours)} hours ago`;
+            } else {
+                return date.toLocaleDateString();
+            }
+        }
+        
+        // ============================================
+        // SIMPLE LOCAL STORAGE FOR USER DATA
+        // ============================================
+        
+        function initializeUser() {
+            let user = localStorage.getItem('forum_user');
+            if (!user) {
+                user = JSON.stringify({
+                    username: 'Traveler',
+                    role: 'Member',
+                    posts: 0,
+                    joined: new Date().toISOString().split('T')[0]
+                });
+                localStorage.setItem('forum_user', user);
+            }
+            
+            const userData = JSON.parse(user);
+            document.getElementById('username').textContent = userData.username;
+        }
+        
+        // ============================================
+        // SCX AI INTEGRATION (Hidden from users)
+        // ============================================
+        
+        function initializeSCX() {
+            // Store SCX data in hidden element
+            const scxStorage = document.getElementById('scxStorage');
+            
+            // Create simplified SCX representation for AI processing
+            const scxRepresentation = {
+                type: "forum_knowledge_graph",
+                nodes: [],
+                edges: [],
+                timestamp: new Date().toISOString()
+            };
+            
+            // Convert forum data to SCX graph
+            forumData.topics.forEach(topic => {
+                scxRepresentation.nodes.push({
+                    id: topic.id,
+                    type: "topic",
+                    label: topic.title,
+                    symbols: topic.scx
+                });
+            });
+            
+            forumData.categories.forEach(category => {
+                scxRepresentation.nodes.push({
+                    id: category.id,
+                    type: "category",
+                    label: category.name,
+                    symbols: category.scx
+                });
+            });
+            
+            // Add SCX data to hidden storage
+            scxStorage.textContent = JSON.stringify(scxRepresentation, null, 2);
+            scxStorage.setAttribute('data-scx-symbols', forumData.metadata.scx_symbols.join(' '));
+        }
+        
+        // ============================================
+        // INITIALIZATION
+        // ============================================
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            renderForums();
+            renderTopics();
+            initializeUser();
+            initializeSCX();
+            registerServiceWorker();
+            
+            // Simple navigation
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Update active state
+                    document.querySelectorAll('.nav-links a').forEach(l => {
+                        l.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                    
+                    // In a real app, this would load different content
+                    alert('Navigation would load: ' + this.getAttribute('href'));
+                });
+            });
+            
+            // Thread title clicks
+            document.querySelectorAll('.thread-title').forEach(title => {
+                title.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    alert('This would open the thread with full discussion and replies.');
+                });
+            });
+            
+            // New Topic button
+            document.querySelector('a[href="#newpost"]').addEventListener('click', function(e) {
+                e.preventDefault();
+                showNewTopicForm();
+            });
+        });
+        
+        function showNewTopicForm() {
+            const formHTML = `
+                <div class="reply-form" style="margin-top: 20px;">
+                    <div class="form-title">Create New Topic</div>
+                    <div class="form-group">
+                        <label for="topicTitle">Topic Title</label>
+                        <input type="text" class="form-control" id="topicTitle" placeholder="Enter your topic title">
+                    </div>
+                    <div class="form-group">
+                        <label for="topicCategory">Category</label>
+                        <select class="form-control" id="topicCategory">
+                            <option>SCX Symbolic Computing</option>
+                            <option>Atomic OS Development</option>
+                            <option>Multi-Agent Systems</option>
+                            <option>Neural-Symbolic AI</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="topicContent">Content</label>
+                        <textarea class="form-control" id="topicContent" placeholder="Type your message here..."></textarea>
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="btn btn-primary" onclick="submitTopic()">Submit Topic</button>
+                        <button class="btn btn-secondary" onclick="cancelTopic()">Cancel</button>
+                    </div>
+                </div>
+            `;
+            
+            // Insert at the end of main content
+            const main = document.querySelector('.forum-main');
+            const existingForm = document.querySelector('.reply-form');
+            if (existingForm) existingForm.remove();
+            
+            main.insertAdjacentHTML('beforeend', formHTML);
+        }
+        
+        function submitTopic() {
+            const title = document.getElementById('topicTitle').value;
+            const content = document.getElementById('topicContent').value;
+            
+            if (!title || !content) {
+                alert('Please fill in all fields.');
+                return;
+            }
+            
+            alert('Topic "' + title + '" would be posted. In a real app, this would save to the database.');
+            
+            // Clear form
+            document.querySelector('.reply-form').remove();
+        }
+        
+        function cancelTopic() {
+            document.querySelector('.reply-form').remove();
+        }
+
+        function registerServiceWorker() {
+            if (!('serviceWorker' in navigator)) {
+                return;
+            }
+
+            navigator.serviceWorker.register('./sw.js').catch(() => {
+                // Ignore registration errors in the static prototype.
+            });
+        }
+    </script>
+</body>
+</html>

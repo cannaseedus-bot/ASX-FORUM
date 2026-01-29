@@ -1,0 +1,14 @@
+{
+  "schema": "brain.v1",
+  "description": "Binary weighted n-gram tensor collection for symbolic learning.",
+  "encoding": "binary",
+  "ngram": {
+    "min": 2,
+    "max": 5
+  },
+  "weights": [],
+  "metadata": {
+    "created": "2025-11-07T10:00:00Z",
+    "updated": "2025-11-07T10:00:00Z"
+  }
+}
